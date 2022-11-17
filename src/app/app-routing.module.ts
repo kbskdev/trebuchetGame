@@ -6,6 +6,7 @@ import {MainLevelComponent} from "./level/main-level/main-level.component";
 
 const routes:Routes = [
   {path:'',component:MainPageComponent},
+  {path:'menu',component:MainPageComponent},
   {path:'level',component:MainLevelComponent}
 ]
 
