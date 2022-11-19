@@ -27,10 +27,17 @@ export class MainLevelComponent implements OnInit, OnDestroy {
     this.trebuchet.releaseWeight()
   }
 
+  @HostListener('window:keydown.space')
+  reload(){
+    this.trebuchet.reload()
+  }
+
   ngOnInit() {
     Matter.Render.run(this.level.myRender)
     Matter.Runner.run(this.level.myRunner,this.level.myEngine)
-    Matter.Composite.add(this.level.myEngine.world,[this.level.box,this.level.mouseConst,this.level.floor])
+    this.level.levelElements.forEach(value => {
+      Matter.Composite.add(this.level.myEngine.world,value)
+    })
     this.trebuchet.trebuchet.forEach(value => {
       Matter.Composite.add(this.level.myEngine.world,value)
     })
@@ -39,14 +46,24 @@ export class MainLevelComponent implements OnInit, OnDestroy {
       Matter.Composite.add(this.level.myEngine.world,value)
     })
 
-    Matter.Events.on(this.level.myEngine,'collisionStart',(event)=>{
-      console.log(event.pairs[0])
-      if(event.pairs[0].bodyA.label=='enemy' && event.pairs[0].bodyB.label=='ammo'){
-        Matter.World.remove(this.level.myEngine.world,this.level.box)
-
-        console.log('siur')
-      }
+    Matter.Events.on(this.level.myEngine,'collisionActive',(event)=>{
+      event.pairs.forEach(value => {
+        if((value.bodyA.label=='ammo' && value.bodyB.label=='enemy')||(value.bodyB.label=='ammo' && value.bodyA.label=='enemy')){
+          Matter.World.remove(this.level.myEngine.world,this.level.box)
+          this.level.spawn()
+          setTimeout(()=>{Matter.World.remove(this.level.myEngine.world,this.trebuchet.trebuchetAmmo)},500)
+        }
+      })
     })
+
+    // Matter.Events.on(this.level.myEngine,'collisionStart',(event)=>{
+    //   console.log(event.pairs)
+    //   if(event.pairs[0].bodyB.label=='enemy' && event.pairs[0].bodyA.label=='ammo'){
+    //     Matter.World.remove(this.level.myEngine.world,this.level.box)
+    //
+    //     console.log('siur')
+    //   }
+    // })
   }
 
   ngOnDestroy() {

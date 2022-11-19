@@ -18,10 +18,10 @@ export class TrebuchetService {
   trebuchetPivot:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetArm,pointA:{x:50,y:-50},bodyB:this.trebuchetSupport,pointB:{x:0,y:-135},length:0})
 
   trebuchetAmmo:Matter.Body = Matter.Bodies.circle(this.position-40, this.level.floor.position.y-40,20,{label:'ammo'})
-  AmmoToArmConstraint:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetAmmo,bodyB:this.trebuchetArm,pointB:{x:-80,y:80},stiffness:0.01,length:120,damping:0.1})
+  AmmoToArmConstraint:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetAmmo,bodyB:this.trebuchetArm,pointB:{x:-80,y:80},stiffness:0.01,length:100,damping:0.1})
   AmmoTofloorConstraint:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetAmmo,pointB:{x:this.trebuchetAmmo.position.x,y:this.trebuchetAmmo.position.y}})
 
-  CounterweightToArm:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetArm,pointA:{x:75,y:-75},bodyB:this.trebuchetCounterweight,length:0})
+  CounterweightToArm:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetArm,pointA:{x:75,y:-75},bodyB:this.trebuchetCounterweight,length:10})
 
 
   trebuchet:Matter.Body[] = [this.trebuchetSupport,this.trebuchetAmmo,this.trebuchetArm,this.trebuchetCounterweight]
@@ -29,11 +29,37 @@ export class TrebuchetService {
 
   releaseAmmo(){
     Matter.World.remove(this.level.myEngine.world,this.AmmoToArmConstraint)
+    this.loaded = false;
   }
 
   releaseWeight(){
-    this.trebuchetCounterweight.isStatic = !this.trebuchetCounterweight.isStatic;
+    this.trebuchetCounterweight.isStatic = false;
   }
+
+  loaded:boolean = true;
+
+  reload()
+  {
+    if(this.loaded==false){
+      this.loaded = true
+      Matter.World.remove(this.level.myEngine.world,this.trebuchetAmmo)
+      this.trebuchetAmmo = Matter.Bodies.circle(this.position-40, this.level.floor.position.y-40,20,{label:'ammo'})
+
+      Matter.Body.set(this.trebuchetCounterweight,'position',{x:this.position+25,y:this.level.floor.position.y-345})
+
+      setTimeout(()=>{
+        this.AmmoToArmConstraint = Matter.Constraint.create({bodyA:this.trebuchetAmmo,bodyB:this.trebuchetArm,pointB:{x:-50,y:100},stiffness:0.01,length:100,damping:0.1})
+        Matter.Composite.add(this.level.myEngine.world,[this.AmmoToArmConstraint])
+
+      },2000)
+
+      this.trebuchetCounterweight.isStatic = true;
+
+      Matter.Composite.add(this.level.myEngine.world,[this.trebuchetAmmo])
+
+    }
+  }
+
 
   constructor(private level:LoaderService) {
   }
