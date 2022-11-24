@@ -1,4 +1,6 @@
 import { Component} from '@angular/core';
+import {LoaderService} from "./level/loader/loader.service";
+import {TrebuchetService} from "./level/trebuchet/trebuchet.service";
 
 
 @Component({
@@ -8,5 +10,7 @@ import { Component} from '@angular/core';
 })
 export class AppComponent{
 
+  constructor(public level:LoaderService, public trebuchet:TrebuchetService) {
+  }
 
 }

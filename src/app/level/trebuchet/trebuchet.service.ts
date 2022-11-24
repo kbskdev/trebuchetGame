@@ -9,10 +9,10 @@ export class TrebuchetService {
 
   position:number = 200
 
-  trebuchetSupport:Matter.Body = Matter.Bodies.rectangle(this.position,this.level.floor.position.y-175,20,350,{isStatic:true,render:{fillStyle:'transparent',lineWidth:1},collisionFilter:{group:-2}})
+  trebuchetSupport:Matter.Body = Matter.Bodies.rectangle(this.position,this.level.floor.position.y-175,20,350,{isStatic:true,render:{fillStyle:'transparent',lineWidth:1},collisionFilter:{group:-2},label:'trebuchet'})
 
-  trebuchetArm:Matter.Body = Matter.Bodies.rectangle(this.position-50,this.level.floor.position.y-290,230,30,{angle:-3.1416/4,collisionFilter:{group:-2}})
-  trebuchetCounterweight:Matter.Body = Matter.Bodies.circle(this.position+25,this.level.floor.position.y-345,30,{isStatic:true,mass:300,collisionFilter:{group:-2}})
+  trebuchetArm:Matter.Body = Matter.Bodies.rectangle(this.position-50,this.level.floor.position.y-290,230,30,{angle:-3.1416/4,collisionFilter:{group:-2},label:'trebuchet'})
+  trebuchetCounterweight:Matter.Body = Matter.Bodies.circle(this.position+25,this.level.floor.position.y-345,30,{isStatic:true,mass:1000,collisionFilter:{group:-2},label:'trebuchet'})
 
 
   trebuchetPivot:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetArm,pointA:{x:50,y:-50},bodyB:this.trebuchetSupport,pointB:{x:0,y:-135},length:0})
@@ -27,16 +27,26 @@ export class TrebuchetService {
   trebuchet:Matter.Body[] = [this.trebuchetSupport,this.trebuchetAmmo,this.trebuchetArm,this.trebuchetCounterweight]
   trebuchetConstraints:Matter.Constraint[] = [this.CounterweightToArm,this.trebuchetPivot,this.AmmoToArmConstraint]
 
+  shots:number = 0
+
+  loaded:boolean = true;
+
   releaseAmmo(){
     Matter.World.remove(this.level.myEngine.world,this.AmmoToArmConstraint)
+    if(this.loaded==true){
+      this.shots++
+    }
     this.loaded = false;
+
   }
+
+
 
   releaseWeight(){
     this.trebuchetCounterweight.isStatic = false;
   }
 
-  loaded:boolean = true;
+
 
   reload()
   {
