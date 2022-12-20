@@ -8,7 +8,7 @@ import {LoseresultComponent} from "./menu/loseresult/loseresult.component";
 
 
 const routes:Routes = [
-  {path:'',component:MainPageComponent},
+  {path:'',component:MainLevelComponent},
   {path:'menu',component:MainPageComponent},
   {path:'level',component:MainLevelComponent},
   {path:'winresult',component:WinresultComponent},

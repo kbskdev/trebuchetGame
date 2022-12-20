@@ -24,8 +24,7 @@ export class TrebuchetService {
   CounterweightToArm:Matter.Constraint = Matter.Constraint.create({bodyA:this.trebuchetArm,pointA:{x:75,y:-75},bodyB:this.trebuchetCounterweight,length:10})
 
 
-  trebuchet:Matter.Body[] = [this.trebuchetSupport,this.trebuchetAmmo,this.trebuchetArm,this.trebuchetCounterweight]
-  trebuchetConstraints:Matter.Constraint[] = [this.CounterweightToArm,this.trebuchetPivot,this.AmmoToArmConstraint]
+  trebuchet:(Matter.Body | Matter.Constraint)[] = [this.trebuchetSupport,this.trebuchetAmmo,this.trebuchetArm,this.trebuchetCounterweight,this.CounterweightToArm,this.trebuchetPivot,this.AmmoToArmConstraint]
 
   shots:number = 0
 
@@ -60,13 +59,10 @@ export class TrebuchetService {
       setTimeout(()=>{
         this.AmmoToArmConstraint = Matter.Constraint.create({bodyA:this.trebuchetAmmo,bodyB:this.trebuchetArm,pointB:{x:-50,y:100},stiffness:0.01,length:100,damping:0.1})
         Matter.Composite.add(this.level.myEngine.world,[this.AmmoToArmConstraint])
-
       },2000)
 
       this.trebuchetCounterweight.isStatic = true;
-
       Matter.Composite.add(this.level.myEngine.world,[this.trebuchetAmmo])
-
     }
   }
 

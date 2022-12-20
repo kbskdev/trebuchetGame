@@ -18,6 +18,7 @@ export class LoaderService {
       height:window.innerHeight-67
     }
   })
+
   myRunner:Matter.Runner = Matter.Runner.create()
 
   points:number = 0
@@ -54,6 +55,19 @@ export class LoaderService {
 
   }
 
+  movePawns(){
+    setInterval(()=>{
+      this.boxes.forEach(value => {
+        Matter.Body.setVelocity(value.body,{x:-5,y:0})
+      })
+    },800)
+
+    setInterval(()=>{
+      this.friendlies.forEach(value => {
+        Matter.Body.setVelocity(value.body,{x:5,y:0})
+      })
+    },1000)
+  }
 
 
   floor:Matter.Body = Matter.Bodies.rectangle(window.innerWidth/2,window.innerHeight-200,window.innerWidth,55,{isStatic:true,label:'floor',friction:0.01})
