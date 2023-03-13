@@ -24,7 +24,7 @@ export class LoaderService {
   points:number = 0
 
 
-  wall1:Matter.Body= Matter.Bodies.rectangle(window.innerWidth-500,500,450,10,{isStatic:true})
+  wall1:Matter.Body = Matter.Bodies.rectangle(window.innerWidth-600,450,400,10,{isStatic:true})
   wall2:Matter.Body= Matter.Bodies.rectangle(window.innerWidth-650,400,10,100,{isStatic:true})
 
 
