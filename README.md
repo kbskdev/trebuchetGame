@@ -1,4 +1,7 @@
 # TrebuchetGame
+
+updated branch is  <b>trebuchet</b>
+
 game made in matterjs and angular
 
 the objective is to destroy square on platfrom, enemies are spawnign every few seconds, u can spawn ur own soldiers, more points = worse score
